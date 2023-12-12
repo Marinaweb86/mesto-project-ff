@@ -10,6 +10,7 @@ function createNewCard({ name, link }) {
   const cardLikeButton = cardElement.querySelector(".card__like-button");
   const cardDeleteButton = cardElement.querySelector(".card__delete-button");
   const cardTitle = cardElement.querySelector(".card__title");
+  cardDeleteButton.addEventListener('click', removeCard);
 
   cardImage.src = link;
   cardImage.alt = `Фотография: ${name}`;
@@ -23,7 +24,9 @@ function createNewCard({ name, link }) {
     evt.target.classList.toggle("card__like-button_is-active");
   });
 
-  cardDeleteButton.addEventListener("click", () => cardElement.remove());
+  function removeCard (event) {
+     cardElement.remove();
+  }
 
   return cardElement;
 }
