@@ -1,5 +1,6 @@
-import { initialCards } from './scripts/cards';
+import { initialCards } from './scripts/cards.js';
 import './pages/index.css';
+import {openPopup,closePopup,closeModalOnOverlay} from './scripts/modal.js';
 const cardTemplate = document.querySelector("#card-template").content;
 const cardForm = document.forms["new-place"];
 const cardNameInput = cardForm.elements["place-name"];
@@ -25,15 +26,13 @@ const addImagePopup = document.querySelector('.popup_type_image');
 const popupImage = document.querySelector('.popup__image');
 const popupImageTitle = document.querySelector('.popup__caption');
 
-
-function createNewCard({ name, link}, callbackDeleteCard) {
+ function createNewCard({ name, link}, removeCard) {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
   const cardLikeButton = cardElement.querySelector(".card__like-button");
   const cardDeleteButton = cardElement.querySelector(".card__delete-button");
   const cardTitle = cardElement.querySelector(".card__title");
   cardDeleteButton.addEventListener('click', removeCard);
-  cardDeleteButton.addEventListener('click', () => callbackDeleteCard(cardElement));
 
   cardImage.src = link;
   cardImage.alt = `Фотография: ${name}`;
@@ -56,19 +55,6 @@ function removeCard (event) {
 }
 
 initialCards.forEach((item) => cardsContainer.prepend(createNewCard(item, removeCard)));
-
-//открытие popup
-function openPopup(popup) {
-  popup.classList.add('popup_is_animated');
-  popup.classList.add('popup_is-opened');
-  document.addEventListener('keydown', closePopupOnEscape);
-}
-
-//закрытие popup
-function closePopup(popup) {
-  document.addEventListener('keydown',closePopupOnEscape);
-  popup.classList.remove('popup_is-opened');
-}
 
 //закрытие всех popup
 //находим все крестики проекта по универсальному селектору
@@ -129,20 +115,6 @@ function handleCardClick(name, link) {
   openPopup(addImagePopup);
 }
 
-// Закрытие по Esc
-const closePopupOnEscape = (event) => {
-  if (event.key === 'Escape') {
-    closePopup(document.querySelector('.popup_is-opened'));
-  }
-};
-
-// Закрытие по  оверлей
-const closeModalOnOverlay = (evt) => {
-  if (evt.target === evt.currentTarget) {
-    closePopup(evt.currentTarget);
-  }
-};
-
 // Закрытие addImagePopup по оверлей
 addImagePopup.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
@@ -152,6 +124,7 @@ addImagePopup.addEventListener("click", (evt) => {
 popupEdit.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
 }) 
+
 //Закрытие addCardPopup по оверлей
 addCardPopup.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
