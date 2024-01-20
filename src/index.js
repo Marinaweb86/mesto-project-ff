@@ -1,7 +1,7 @@
 import { initialCards } from './scripts/cards.js';
 import './pages/index.css';
 import {openPopup,closePopup,closeModalOnOverlay} from './scripts/modal.js';
-const cardTemplate = document.querySelector("#card-template").content;
+import {createNewCard,removeCard} from './scripts/card.js'; 
 const cardForm = document.forms["new-place"];
 const cardNameInput = cardForm.elements["place-name"];
 const cardLinkInput = cardForm.elements.link;
@@ -25,36 +25,8 @@ const addCardPopup = document.querySelector('.popup_type_new-card');
 const addImagePopup = document.querySelector('.popup_type_image');
 const popupImage = document.querySelector('.popup__image');
 const popupImageTitle = document.querySelector('.popup__caption');
-
- function createNewCard({ name, link}, removeCard) {
-  const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
-  const cardImage = cardElement.querySelector(".card__image");
-  const cardLikeButton = cardElement.querySelector(".card__like-button");
-  const cardDeleteButton = cardElement.querySelector(".card__delete-button");
-  const cardTitle = cardElement.querySelector(".card__title");
-  cardDeleteButton.addEventListener('click', removeCard);
-
-  cardImage.src = link;
-  cardImage.alt = `Фотография: ${name}`;
-  cardTitle.textContent = name;
-
-  cardImage.addEventListener("click", () => {
-    handleCardClick(name, link);
-  });
-
-  cardLikeButton.addEventListener("click", (evt) => {
-    evt.target.classList.toggle("card__like-button_is-active");
-  });
-
-  return cardElement;
-}
-
-function removeCard (event) {
-  const cardElement = event.target.closest('.card');
-  cardElement.remove();
-}
-
-initialCards.forEach((item) => cardsContainer.prepend(createNewCard(item, removeCard)));
+ 
+initialCards.forEach((item) => cardsContainer.prepend(createNewCard(item,removeCard,handleCardClick)));
 
 //закрытие всех popup
 //находим все крестики проекта по универсальному селектору
@@ -93,7 +65,7 @@ function renderCard(card) {
 }
 
 //сохранение addCardPopup
-function handlePopupFormSubmit(event) {
+function submitAddCardForm(event) {
   event.preventDefault();
 
   const item = {};
@@ -105,10 +77,10 @@ function handlePopupFormSubmit(event) {
   closePopup(addCardPopup);
 }
 
-addCardPopup.addEventListener('submit', handlePopupFormSubmit);
+addCardPopup.addEventListener('submit', submitAddCardForm);
 
 //открытие полноразмерного изображения
-function handleCardClick(name, link) {
+export function handleCardClick(name, link) {
   popupImage.src = link;
   popupImage.alt = `Фотография: ${name}`;
   popupImageTitle.textContent = name;
