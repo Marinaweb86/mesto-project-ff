@@ -1,7 +1,7 @@
 import { initialCards } from './scripts/cards.js';
 import './pages/index.css';
 import {openPopup,closePopup,closeModalOnOverlay} from './scripts/modal.js';
-import {createNewCard,removeCard} from './scripts/card.js'; 
+import {createNewCard,removeCard,likeCard} from './scripts/card.js'; 
 const cardForm = document.forms["new-place"];
 const cardNameInput = cardForm.elements["place-name"];
 const cardLinkInput = cardForm.elements.link;
@@ -26,7 +26,7 @@ const addImagePopup = document.querySelector('.popup_type_image');
 const popupImage = document.querySelector('.popup__image');
 const popupImageTitle = document.querySelector('.popup__caption');
  
-initialCards.forEach((item) => cardsContainer.prepend(createNewCard(item,removeCard,handleCardClick)));
+initialCards.forEach((item) => cardsContainer.prepend(createNewCard(item,removeCard,likeCard,handleCardClick)));
 
 //закрытие всех popup
 //находим все крестики проекта по универсальному селектору
@@ -80,7 +80,7 @@ function submitAddCardForm(event) {
 addCardPopup.addEventListener('submit', submitAddCardForm);
 
 //открытие полноразмерного изображения
-export function handleCardClick(name, link) {
+ function handleCardClick(name, link) {
   popupImage.src = link;
   popupImage.alt = `Фотография: ${name}`;
   popupImageTitle.textContent = name;

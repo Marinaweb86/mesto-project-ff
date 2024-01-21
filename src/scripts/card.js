@@ -1,5 +1,4 @@
-import {handleCardClick} from '../index';
-export function createNewCard({ name, link},removeCard,handleCardClick) {
+export function createNewCard({ name, link},removeCard,likeCard,handleCardClick) {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
@@ -7,6 +6,7 @@ export function createNewCard({ name, link},removeCard,handleCardClick) {
   const cardDeleteButton = cardElement.querySelector(".card__delete-button");
   const cardTitle = cardElement.querySelector(".card__title");
   cardDeleteButton.addEventListener('click', removeCard);
+  cardLikeButton.addEventListener('click', likeCard);
 
   cardImage.src = link;
   cardImage.alt = `Фотография: ${name}`;
@@ -15,11 +15,6 @@ export function createNewCard({ name, link},removeCard,handleCardClick) {
   cardImage.addEventListener("click", () => {
     handleCardClick(name, link);
   });
-   
-    cardLikeButton.addEventListener("click", (evt) => {
-    evt.target.classList.toggle("card__like-button_is-active");
-    })
-  
 
   return cardElement;
 }
@@ -29,3 +24,6 @@ export function removeCard (event) {
   cardElement.remove();
 }
  
+export function likeCard (evt) {
+   evt.target.classList.toggle("card__like-button_is-active"); 
+  }
