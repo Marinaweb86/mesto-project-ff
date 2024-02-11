@@ -1,0 +1,16 @@
+.profile__image-overlay {
+  inline-size: 120px;
+  block-size: 120px;
+  background-color: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  font-family: "Inter", Arial, sans-serif;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    visibility 0.3s,
+    opacity 0.6s;
+  background-image: url(../../../../src/images/edit-icon.svg);
+  background-repeat: no-repeat;
+  background-size: 26px;
+  background-position: center;
+}

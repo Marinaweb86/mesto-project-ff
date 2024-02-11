@@ -1,0 +1,14 @@
+.profile__image-container {
+  inline-size: fit-content;
+  block-size: fit-content;
+  position: relative;
+  cursor: pointer;
+}
+
+.profile__image-container:hover .profile__image-overlay {
+  visibility: initial;
+  opacity: 1;
+  transition:
+    visibility 0.3s,
+    opacity 0.6s;
+}
