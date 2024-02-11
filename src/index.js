@@ -1,7 +1,7 @@
 import { initialCards } from "./scripts/cards.js";
 import "./pages/index.css";
 import { openPopup, closePopup, closeModalOnOverlay } from "./scripts/modal.js";
-import { renderCard, likeCard, deleteMyCard } from "./scripts/card.js";
+import { createNewCard, likeCard } from "./scripts/card.js";
 import { enableValidation, clearValidation } from "./scripts/validation.js";
 import {
   getInitialInfo,
@@ -16,7 +16,7 @@ const cardNameInput = cardForm.elements["place-name"];
 const cardLinkInput = cardForm.elements.link;
 const cardsContainer = document.querySelector(".places__list");
 const elements = document.querySelector(".places");
-const editProfileButton = document.querySelector(".profile__edit-button");
+const buttonOpenPopupProfile = document.querySelector(".profile__edit-button");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const closeButtons = document.querySelectorAll(".popup__close");
@@ -25,14 +25,16 @@ const jobInput = document.querySelector(".popup__input_type_description");
 const popupProfileForm = document.forms["edit-profile"];
 const profileAvatar = document.querySelector(".profile__image");
 const popupEdit = document.querySelector(".popup_type_edit");
-const addCardButton = document.querySelector(".profile__add-button");
+const buttonOpenAddCardPopup = document.querySelector(".profile__add-button");
 const addCardPopup = document.querySelector(".popup_type_new-card");
 const addImagePopup = document.querySelector(".popup_type_image");
 const popupImage = document.querySelector(".popup__image");
 const popupImageTitle = document.querySelector(".popup__caption");
 const popupAvatar = document.querySelector(".popup__type_edit-avatar");
 const popupAvatarForm = document.forms["edit-avatar"];
-const avatarEditButton = document.querySelector(".profile__image-container");
+const buttonOpenPopupAvatar = document.querySelector(
+  ".profile__image-container"
+);
 const popupConfirm = document.querySelector(".popup_type_confirm");
 const popupConfirmButton = popupConfirm.querySelector(".popup__button");
 
@@ -63,19 +65,19 @@ const renderInitialCards = (initialCards, userId) => {
       userId,
       cardsContainer,
       likeCard,
-      deleteMyCard,
+      removeCard,
       handleCardClick
     );
   });
 };
 
-editProfileButton.addEventListener("click", () => {
+buttonOpenPopupProfile.addEventListener("click", () => {
   openPopup(popupEdit);
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
 });
 
-const handleProfileFormSubmit = async (evt) => {
+const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
   renderLoading(true, popupProfileForm.querySelector(".popup__button"));
   updateUserProfile({
@@ -101,10 +103,12 @@ popupEdit.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
 });
 
-const handleAvatarFormSubmit = async (evt) => {
+const handleAvatarFormSubmit = (evt) => {
   evt.preventDefault();
   renderLoading(true, popupAvatarForm.querySelector(".popup__button"));
-  updateUserAvatar(popupAvatarForm.link.value)
+  updateUserAvatar(
+    popupAvatarForm.querySelector(".popup__input_type_url").value
+  )
     .then((updatedProfile) => {
       fillProfileInfo(updatedProfile);
       closePopup(popupAvatar);
@@ -118,7 +122,7 @@ const handleAvatarFormSubmit = async (evt) => {
     });
 };
 
-avatarEditButton.addEventListener("click", (evt) => {
+buttonOpenPopupAvatar.addEventListener("click", (evt) => {
   clearValidation(popupAvatarForm, validationConfig);
   popupAvatarForm.reset();
   openPopup(popupAvatar);
@@ -130,7 +134,7 @@ popupAvatar.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
 });
 
-addCardButton.addEventListener("click", () => {
+buttonOpenAddCardPopup.addEventListener("click", () => {
   openPopup(addCardPopup);
 });
 
@@ -145,7 +149,7 @@ addImagePopup.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
 });
 
-const handleConfirmDelete = async (evt) => {
+const handleConfirmDelete = (evt) => {
   deleteCardFromServer(popupConfirm.dataset.cardId)
     .then((result) => {
       const card = document.querySelector(
@@ -158,14 +162,13 @@ const handleConfirmDelete = async (evt) => {
       console.log(err);
     });
 };
-
-avatarEditButton.addEventListener("click", (evt) => {
+buttonOpenPopupAvatar.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
 });
 
 popupConfirmButton.addEventListener("click", handleConfirmDelete);
 
-const handleNewCardFormSubmit = async (evt) => {
+const handleNewCardFormSubmit = (evt) => {
   evt.preventDefault();
   renderLoading(true, cardForm.querySelector(".popup__button"));
   const name = cardForm.elements["place-name"].value;
@@ -198,7 +201,7 @@ const fillProfilePopup = (form, name, description) => {
   form.elements.description.value = description;
 };
 
-editProfileButton.addEventListener("click", () => {
+buttonOpenPopupProfile.addEventListener("click", () => {
   clearValidation(popupProfileForm, validationConfig);
   fillProfilePopup(
     popupProfileForm,
@@ -212,7 +215,7 @@ addCardPopup.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
 });
 
-addCardButton.addEventListener("click", () => {
+buttonOpenAddCardPopup.addEventListener("click", () => {
   cardForm.reset();
   clearValidation(cardForm, validationConfig);
   openPopup(addCardPopup);
@@ -225,6 +228,34 @@ document.addEventListener("click", (evt) => {
     closePopup(evt.target.parentNode.parentNode);
   }
 });
+
+const renderCard = (
+  item,
+  userId,
+  container,
+  likeCard,
+  removeCard,
+  handleCardClick,
+  place = "end"
+) => {
+  const cardElement = createNewCard(
+    item,
+    userId,
+    removeCard,
+    likeCard,
+    handleCardClick
+  );
+  if (place === "end") {
+    container.append(cardElement);
+  } else {
+    container.prepend(cardElement);
+  }
+};
+
+const removeCard = (evt, cardId) => {
+  openPopup(popupConfirm);
+  popupConfirm.dataset.cardId = cardId;
+};
 
 getInitialInfo()
   .then((result) => {

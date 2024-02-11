@@ -40,7 +40,7 @@ const hideInputError = (
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.remove(inputErrorClass);
   errorElement.classList.remove(errorClass);
-  errorElement.textContent = "";
+  errorElement.textContent = '';
 };
 
 const checkInputValidity = (
@@ -52,7 +52,7 @@ const checkInputValidity = (
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
   } else {
-    inputElement.setCustomValidity("");
+    inputElement.setCustomValidity();
   }
 
   if (!inputElement.validity.valid) {
@@ -76,7 +76,7 @@ const setEventListeners = (
   submitButtonSelector,
   inactiveButtonClass
 ) => {
-  const formList = Array.from(document.querySelectorAll(".form"));
+  const formList = Array.from(document.querySelectorAll('.form'));
   const buttonElement = formElement.querySelector(submitButtonSelector);
   toggleButtonState(inputList, buttonElement, inactiveButtonClass);
   inputList.forEach((inputElement) => {

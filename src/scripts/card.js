@@ -6,7 +6,7 @@ const popupConfirm = document.querySelector(".popup_type_confirm");
 export const createNewCard = (
   card,
   userId,
-  deleteMyCard,
+  removeCard,
   likeCard,
   handleCardClick
 ) => {
@@ -31,7 +31,7 @@ export const createNewCard = (
 
   if (card.owner._id === userId) {
     cardDeleteButton.addEventListener("click", (evt) => {
-      deleteMyCard(evt, card._id);
+      removeCard(evt, card._id);
     });
   } else {
     cardDeleteButton.remove();
@@ -48,30 +48,8 @@ export const createNewCard = (
   return cardElement;
 };
 
-const renderCard = (
-  item,
-  userId,
-  container,
-  likeCard,
-  deleteMyCard,
-  handleCardClick,
-  place = "end"
-) => {
-  const cardElement = createNewCard(
-    item,
-    userId,
-    deleteMyCard,
-    likeCard,
-    handleCardClick
-  );
-  if (place === "end") {
-    container.append(cardElement);
-  } else {
-    container.prepend(cardElement);
-  }
-};
 
-const likeCard = async (evt, cardId) => {
+const likeCard = (evt, cardId) => {
   let currentLikes = evt.target.parentNode.querySelector(".card__like-count");
 
   if (evt.target.classList.contains("card__like-button_is-active")) {
@@ -95,9 +73,4 @@ const likeCard = async (evt, cardId) => {
   }
 };
 
-const deleteMyCard = (evt, cardId) => {
-  openPopup(popupConfirm);
-  popupConfirm.dataset.cardId = cardId;
-};
-
-export { renderCard, likeCard, deleteMyCard };
+export { likeCard};

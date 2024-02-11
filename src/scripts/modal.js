@@ -1,6 +1,5 @@
 export function openPopup(popup) {
-  popup.classList.add("popup_is_animated");
-  popup.classList.add("popup_is-opened");
+  popup.classList.add("popup_is_animated","popup_is-opened");
   document.addEventListener("keydown", closePopupOnEscape);
 }
 
@@ -8,7 +7,6 @@ export function openPopup(popup) {
 export function closePopup(popup) {
   document.addEventListener("keydown", closePopupOnEscape);
   popup.classList.remove("popup_is-opened");
-  popup.classList.remove("popup_is_animated");
 }
 
 // Закрытие по Esc

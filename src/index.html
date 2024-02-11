@@ -70,7 +70,7 @@
               data-error-message="Разрешены только латинские буквы и кириллические буквы, знаки дефиса и пробелы"
               required
             />
-            <span class="popup__error description__input-error"></span>
+            <span class="popup__error description-input-error"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -79,13 +79,12 @@
       </div>
       <div class="popup popup__type_edit-avatar">
         <div class ="popup__content">
-          <button class="button" type="popup__close"></button>
+          <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Обновить аватар</h3>
           <form class="popup__form" name="edit-avatar" novalidate>
             <input
              type="url"
              name="avatar"
-             id="link-input"
              class="popup__input popup__input_type_url"
              placeholder="Ссылка на картинку"
              id="avatar-input"
@@ -113,7 +112,7 @@
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               required
             />
-            <span class="popup__error place-name-error"></span>
+            <span class="popup__error place-name-input-error"></span>
             <input
               type="url"
               name="link"
