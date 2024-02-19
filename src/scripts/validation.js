@@ -1,6 +1,6 @@
 const enableValidation = (validationConfig) => {
   const formList = Array.from(
-    document.querySelectorAll(validationConfig.formSelector)
+    document.querySelectorAll(".popup__form")
   );
   formList.forEach((formElement) => {
     formElement.addEventListener("submit", (evt) => {
@@ -76,7 +76,7 @@ const setEventListeners = (
   submitButtonSelector,
   inactiveButtonClass
 ) => {
-  const formList = Array.from(document.querySelectorAll('.form'));
+  const formList = Array.from(document.querySelectorAll(".popup__form"));
   const buttonElement = formElement.querySelector(submitButtonSelector);
   toggleButtonState(inputList, buttonElement, inactiveButtonClass);
   inputList.forEach((inputElement) => {
@@ -110,7 +110,7 @@ const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => {
 
 const clearValidation = (formElement, validationConfig) => {
   const inputList = Array.from(
-    formElement.querySelectorAll(validationConfig.inputSelector)
+    formElement.querySelectorAll(".popup__input")
   );
   const buttonElement = formElement.querySelector(
     validationConfig.submitButtonSelector
