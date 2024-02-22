@@ -26,8 +26,8 @@ const popupProfileForm = document.forms["edit-profile"];
 const profileAvatar = document.querySelector(".profile__image");
 const popupEdit = document.querySelector(".popup_type_edit");
 const buttonOpenAddCardPopup = document.querySelector(".profile__add-button");
-const addCardPopup = document.querySelector(".popup_type_new-card");
-const addImagePopup = document.querySelector(".popup_type_image");
+const popupAddCard = document.querySelector(".popup_type_new-card");
+const popupAddImage = document.querySelector(".popup_type_image");
 const popupImage = document.querySelector(".popup__image");
 const popupImageTitle = document.querySelector(".popup__caption");
 const popupAvatar = document.querySelector(".popup__type_edit-avatar");
@@ -35,8 +35,12 @@ const popupAvatarForm = document.forms["edit-avatar"];
 const buttonOpenPopupAvatar = document.querySelector(
   ".profile__image-container"
 );
+
 const popupConfirm = document.querySelector(".popup_type_confirm");
 const popupConfirmButton = popupConfirm.querySelector(".popup__button");
+const linkInput = popupAvatarForm.querySelector(".popup__input_type_url");
+let card = document.querySelector( `[data-card-id="${popupConfirm.dataset.cardId}"]`);
+
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -58,7 +62,7 @@ const fillProfileInfo = (userInfo) => {
   profileAvatar.style.backgroundImage = `url(${userInfo.avatar})`;
 };
 
-const renderInitialCards = (initialCards, userId) => {
+const renderInitialCards = (initialCards) => {
   initialCards.forEach((card) => {
     renderCard(
       card,
@@ -106,9 +110,7 @@ popupEdit.addEventListener("click", (evt) => {
 const handleAvatarFormSubmit = (evt) => {
   evt.preventDefault();
   renderLoading(true, popupAvatarForm.querySelector(".popup__button"));
-  updateUserAvatar(
-    popupAvatarForm.querySelector(".popup__input_type_url").value
-  )
+  updateUserAvatar(linkInput.value)
     .then((updatedProfile) => {
       fillProfileInfo(updatedProfile);
       closePopup(popupAvatar);
@@ -135,26 +137,24 @@ popupAvatar.addEventListener("click", (evt) => {
 });
 
 buttonOpenAddCardPopup.addEventListener("click", () => {
-  openPopup(addCardPopup);
+  openPopup(popupAddCard);
 });
 
 function handleCardClick(imageURL, imageAlt, title) {
   popupImage.src = imageURL;
   popupImage.alt = imageAlt;
   popupImageTitle.textContent = title;
-  openPopup(addImagePopup);
+  openPopup(popupAddImage);
 }
 
-addImagePopup.addEventListener("click", (evt) => {
+popupAddImage.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
 });
 
-const handleConfirmDelete = (evt) => {
+const handleDeleteCard = (evt) => {
   deleteCardFromServer(popupConfirm.dataset.cardId)
     .then((result) => {
-      const card = document.querySelector(
-        `[data-card-id="${popupConfirm.dataset.cardId}"]`
-      );
+      
       card.remove();
       closePopup(popupConfirm);
     })
@@ -162,11 +162,12 @@ const handleConfirmDelete = (evt) => {
       console.log(err);
     });
 };
+
 buttonOpenPopupAvatar.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
 });
 
-popupConfirmButton.addEventListener("click", handleConfirmDelete);
+popupConfirmButton.addEventListener("click", handleDeleteCard);
 
 const handleNewCardFormSubmit = (evt) => {
   evt.preventDefault();
@@ -180,11 +181,11 @@ const handleNewCardFormSubmit = (evt) => {
         userId,
         cardsContainer,
         likeCard,
-        deleteMyCard,
+        removeCard,
         handleCardClick,
         "start"
       );
-      closePopup(addCardPopup);
+      closePopup(popupAddCard);
       cardForm.reset();
       clearValidation(cardForm, validationConfig);
     })
@@ -211,14 +212,14 @@ buttonOpenPopupProfile.addEventListener("click", () => {
   openPopup(popupEdit);
 });
 
-addCardPopup.addEventListener("click", (evt) => {
+popupAddCard.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
 });
 
 buttonOpenAddCardPopup.addEventListener("click", () => {
   cardForm.reset();
   clearValidation(cardForm, validationConfig);
-  openPopup(addCardPopup);
+  openPopup(popupAddCard);
 });
 
 cardForm.addEventListener("submit", handleNewCardFormSubmit);
@@ -243,7 +244,8 @@ const renderCard = (
     userId,
     removeCard,
     likeCard,
-    handleCardClick
+    handleCardClick,
+    openPopupConfirm
   );
   if (place === "end") {
     container.append(cardElement);
@@ -252,10 +254,15 @@ const renderCard = (
   }
 };
 
-const removeCard = (evt, cardId) => {
-  openPopup(popupConfirm);
-  popupConfirm.dataset.cardId = cardId;
+const openPopupConfirm = ( cardElement ) => {
+  card = cardElement;
+ openPopup(popupConfirm)
 };
+
+const removeCard = (evt, cardId) => { 
+  openPopup(popupConfirm); 
+popupConfirm.dataset.cardId = cardId; 
+}; 
 
 getInitialInfo()
   .then((result) => {
