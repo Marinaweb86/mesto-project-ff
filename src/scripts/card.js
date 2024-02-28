@@ -4,13 +4,15 @@ const cardTemplate = document.querySelector("#card-template").content;
 const popupConfirm = document.querySelector(".popup_type_confirm");
 const popupConfirmButton = popupConfirm.querySelector(".popup__button");
 
+export let cardToDelete = { handleDeleteCard: null, _id: null };
+
 export const createNewCard = (
   card,
   userId,
   removeCard,
   likeCard,
   handleCardClick,
-  openPopupDelete
+  openPopupConfirm
 ) => {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
@@ -18,7 +20,11 @@ export const createNewCard = (
   const cardDeleteButton = cardElement.querySelector(".card__delete-button");
   const cardTitle = cardElement.querySelector(".card__title");
   const cardLikeCount = cardElement.querySelector(".card__like-count");
-  popupConfirmButton.addEventListener('click', () => openPopupDelete(cardElement ));
+  popupConfirmButton.addEventListener("click", () => {
+    cardToDelete.handleDeleteCard = cardElement.remove;
+    cardToDelete._id = card._id;
+    openPopupConfirm();
+  });
 
   cardElement.dataset.cardId = card._id;
   cardElement.dataset.ownerId = card.owner._id;
@@ -51,7 +57,6 @@ export const createNewCard = (
   return cardElement;
 };
 
-
 const likeCard = (evt, cardId) => {
   let currentLikes = evt.target.parentNode.querySelector(".card__like-count");
 
@@ -76,4 +81,4 @@ const likeCard = (evt, cardId) => {
   }
 };
 
-export { likeCard};
+export { likeCard };

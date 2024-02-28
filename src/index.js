@@ -1,7 +1,7 @@
 import { initialCards } from "./scripts/cards.js";
 import "./pages/index.css";
 import { openPopup, closePopup, closeModalOnOverlay } from "./scripts/modal.js";
-import { createNewCard, likeCard } from "./scripts/card.js";
+import {cardToDelete, createNewCard, likeCard } from "./scripts/card.js";
 import { enableValidation, clearValidation } from "./scripts/validation.js";
 import {
   getInitialInfo,
@@ -39,8 +39,6 @@ const buttonOpenPopupAvatar = document.querySelector(
 const popupConfirm = document.querySelector(".popup_type_confirm");
 const popupConfirmButton = popupConfirm.querySelector(".popup__button");
 const linkInput = popupAvatarForm.querySelector(".popup__input_type_url");
-let card = document.querySelector( `[data-card-id="${popupConfirm.dataset.cardId}"]`);
-
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -151,17 +149,16 @@ popupAddImage.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
 });
 
-const handleDeleteCard = (evt) => {
-  deleteCardFromServer(popupConfirm.dataset.cardId)
-    .then((result) => {
-      
-      card.remove();
-      closePopup(popupConfirm);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+const handleDeleteCard = () => { 
+  deleteCardFromServer(cardToDelete._id) 
+    .then(() => { 
+      card.remove(); 
+      closePopup(popupConfirm); 
+    }) 
+    .catch((err) => { 
+      console.log(err); 
+    }); 
+}; 
 
 buttonOpenPopupAvatar.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
@@ -254,14 +251,14 @@ const renderCard = (
   }
 };
 
-const openPopupConfirm = ( cardElement ) => {
-  card = cardElement;
- openPopup(popupConfirm)
-};
+const removeCard = (evt, cardId) => {  
+  openPopup(popupConfirm);  
+popupConfirm.cardId = cardId;  
+};  
 
-const removeCard = (evt, cardId) => { 
-  openPopup(popupConfirm); 
-popupConfirm.dataset.cardId = cardId; 
+const openPopupConfirm = ( cardElement ) => { 
+  card = cardElement; 
+ openPopup(popupConfirm) 
 }; 
 
 getInitialInfo()
