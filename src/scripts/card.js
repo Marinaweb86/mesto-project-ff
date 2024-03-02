@@ -9,7 +9,6 @@ export let cardToDelete = { handleDeleteCard: null, _id: null };
 export const createNewCard = (
   card,
   userId,
-  removeCard,
   likeCard,
   handleCardClick,
   openPopupConfirm
@@ -40,7 +39,7 @@ export const createNewCard = (
 
   if (card.owner._id === userId) {
     cardDeleteButton.addEventListener("click", (evt) => {
-      removeCard(evt, card._id);
+      openPopupConfirm(evt, card._id);
     });
   } else {
     cardDeleteButton.remove();

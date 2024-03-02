@@ -1,7 +1,7 @@
 import { initialCards } from "./scripts/cards.js";
 import "./pages/index.css";
 import { openPopup, closePopup, closeModalOnOverlay } from "./scripts/modal.js";
-import {cardToDelete, createNewCard, likeCard } from "./scripts/card.js";
+import { cardToDelete, createNewCard, likeCard } from "./scripts/card.js";
 import { enableValidation, clearValidation } from "./scripts/validation.js";
 import {
   getInitialInfo,
@@ -62,14 +62,7 @@ const fillProfileInfo = (userInfo) => {
 
 const renderInitialCards = (initialCards) => {
   initialCards.forEach((card) => {
-    renderCard(
-      card,
-      userId,
-      cardsContainer,
-      likeCard,
-      removeCard,
-      handleCardClick
-    );
+    renderCard(card, userId, cardsContainer, likeCard, handleCardClick);
   });
 };
 
@@ -149,16 +142,16 @@ popupAddImage.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
 });
 
-const handleDeleteCard = () => { 
-  deleteCardFromServer(cardToDelete._id) 
-    .then(() => { 
-      card.remove(); 
-      closePopup(popupConfirm); 
-    }) 
-    .catch((err) => { 
-      console.log(err); 
-    }); 
-}; 
+const handleDeleteCard = () => {
+  deleteCardFromServer(cardToDelete._id)
+    .then(() => {
+      card.remove();
+      closePopup(popupConfirm);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 buttonOpenPopupAvatar.addEventListener("click", (evt) => {
   closeModalOnOverlay(evt);
@@ -178,7 +171,6 @@ const handleNewCardFormSubmit = (evt) => {
         userId,
         cardsContainer,
         likeCard,
-        removeCard,
         handleCardClick,
         "start"
       );
@@ -232,14 +224,12 @@ const renderCard = (
   userId,
   container,
   likeCard,
-  removeCard,
   handleCardClick,
   place = "end"
 ) => {
   const cardElement = createNewCard(
     item,
     userId,
-    removeCard,
     likeCard,
     handleCardClick,
     openPopupConfirm
@@ -251,15 +241,9 @@ const renderCard = (
   }
 };
 
-const removeCard = (evt, cardId) => {  
-  openPopup(popupConfirm);  
-popupConfirm.cardId = cardId;  
-};  
-
-const openPopupConfirm = ( cardElement ) => { 
-  card = cardElement; 
- openPopup(popupConfirm) 
-}; 
+const openPopupConfirm = () => {
+  openPopup(popupConfirm);
+};
 
 getInitialInfo()
   .then((result) => {
