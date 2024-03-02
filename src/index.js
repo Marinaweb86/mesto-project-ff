@@ -145,7 +145,7 @@ popupAddImage.addEventListener("click", (evt) => {
 const handleDeleteCard = () => {
   deleteCardFromServer(cardToDelete._id)
     .then(() => {
-      card.remove();
+      cardToDelete.card.remove();
       closePopup(popupConfirm);
     })
     .catch((err) => {
