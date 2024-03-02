@@ -172,6 +172,7 @@ const handleNewCardFormSubmit = (evt) => {
         cardsContainer,
         likeCard,
         handleCardClick,
+        openPopupConfirm,
         "start"
       );
       closePopup(popupAddCard);

@@ -11,6 +11,7 @@ export const createNewCard = (
   userId,
   likeCard,
   handleCardClick,
+  handleDeleteCard,
   openPopupConfirm
 ) => {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
@@ -22,7 +23,7 @@ export const createNewCard = (
   popupConfirmButton.addEventListener("click", () => {
     cardToDelete.handleDeleteCard = cardElement.remove;
     cardToDelete._id = card._id;
-    openPopupConfirm();
+    handleDeleteCard();
   });
 
   cardElement.dataset.cardId = card._id;
@@ -39,7 +40,8 @@ export const createNewCard = (
 
   if (card.owner._id === userId) {
     cardDeleteButton.addEventListener("click", (evt) => {
-      openPopupConfirm(evt, card._id);
+      cardToDelete._id = card._id;
+    openPopupConfirm();
     });
   } else {
     cardDeleteButton.remove();
