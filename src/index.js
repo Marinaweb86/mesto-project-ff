@@ -62,7 +62,7 @@ const fillProfileInfo = (userInfo) => {
 
 const renderInitialCards = (initialCards) => {
   initialCards.forEach((card) => {
-    renderCard(card, userId, cardsContainer, likeCard, handleCardClick);
+    renderCard(card, userId, cardsContainer, likeCard, handleCardClick,openPopupConfirm);
   });
 };
 
